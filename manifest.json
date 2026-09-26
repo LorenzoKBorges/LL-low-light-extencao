@@ -1,0 +1,38 @@
+{
+  "manifest_version": 3,
+  "name": "LL, Low Light",
+  "version": "1.0",
+  "description": "Bloqueia sites durante o hor\u00e1rio definido pelo professor da turma.",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsGiRaUYDzjIt6mji9rilPh3qiPG+Rt/93Vqz7/jpr6go+g+0lX93UxWifVW0chvv79u+FAkE8OqAJaSCxTPiKueEjnMDEERNzPqM/8+t2JKmHu+EyUJiaWL6cQ7wc5fhqlnt2EqaA97A092v3PrPRKNsRuhvCz1wAKfvevaz2KBX1qgnk+iWb2VFOA74ynhoE4xjCvAN40W+zpH1CW0rKmPSliZGD/hldpFlTmY3J94sJFgYaSz+/R6FZP1GhDk6a9Np3YG4XaCfRW7pbMweHpHRmCUdr1cb3uFgSa7scUdwyLUttOvy0AQDUvaZM/L8M6GsO/4EqgCnNEFe4wiMiwIDAQAB",
+  "permissions": [
+    "tabs",
+    "alarms",
+    "storage",
+    "identity"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "oauth2": {
+    "client_id": "465874621790-6keqv9ne0drmtfejs0kdvjqb6p54dhvd.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/userinfo.email"
+    ]
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "blocked.html"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            width: 240px;
+            padding: 14px;
+            font-family: system-ui, sans-serif;
+            font-size: 13px;
+            background: #141414;
+            color: #EAEAEA;
+        }
+        h3 { margin: 0 0 8px 0; font-size: 14px; }
+        .linha { margin-bottom: 4px; }
+        .rotulo { color: #999; }
+        button {
+            margin-top: 10px;
+            width: 100%;
+            padding: 8px;
+            background: #F5A623;
+            color: #060606;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:disabled { opacity: 0.6; cursor: default; }
+    </style>
+</head>
+<body>
+    <h3>LL, Low Light</h3>
+    <div id="status">Carregando...</div>
+    <button id="conectar">Conectar com Google</button>
+    <script src="popup.js"></script>
+</body>
+</html>

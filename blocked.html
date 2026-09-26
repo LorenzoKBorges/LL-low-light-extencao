@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>LL, Low Light | Foco necessário</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #060606;
+            color: #FFFFFF;
+            font-family: system-ui, sans-serif;
+        }
+        .container {
+            text-align: center;
+            background: #141414;
+            padding: 50px;
+            border-radius: 20px;
+            border: 1px solid rgba(245, 166, 35, 0.3);
+            max-width: 400px;
+        }
+        .icon { font-size: 3.5rem; margin-bottom: 16px; }
+        h1 {
+            color: #F5A623;
+            margin: 0 0 10px 0;
+            font-size: 1.8rem;
+        }
+        p {
+            color: #A0A0A0;
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 26px;
+        }
+        .btn {
+            background-color: #F5A623;
+            color: #060606;
+            border: none;
+            padding: 12px 26px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        .btn:hover { filter: brightness(1.1); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">💡</div>
+        <h1>Foco necessário</h1>
+        <p>Este site está bloqueado durante o horário de aula atual. Aproveita pra voltar sua atenção pra sala.</p>
+        <button class="btn" onclick="window.close()">Fechar aba</button>
+    </div>
+</body>
+</html>
