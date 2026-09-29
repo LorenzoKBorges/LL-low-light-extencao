@@ -17,17 +17,21 @@ const DIAS_JS_PARA_ENUM = ['domingo', 'segunda', 'terca', 'quarta', 'quinta', 's
 
 chrome.runtime.onInstalled.addListener(() => {
     chrome.alarms.create(NOME_ALARME, { periodInMinutes: INTERVALO_MINUTOS });
-    sincronizarGrade();
+    sincronizarGrade().finally(aplicarBloqueioEmTodasAsAbas);
 });
 
 chrome.runtime.onStartup.addListener(() => {
     chrome.alarms.create(NOME_ALARME, { periodInMinutes: INTERVALO_MINUTOS });
-    sincronizarGrade();
+    sincronizarGrade().finally(aplicarBloqueioEmTodasAsAbas);
 });
 
 chrome.alarms.onAlarm.addListener((alarm) => {
     if (alarm.name === NOME_ALARME) {
-        sincronizarGrade();
+        // sincroniza e, MESMO que a rede falhe, reavalia as abas já
+        // abertas com o que já sabíamos — é isso que pega uma aba que
+        // já estava aberta (ex: um vídeo tocando) quando o bloqueio
+        // começou, já que ela nunca dispara um evento de navegação.
+        sincronizarGrade().finally(aplicarBloqueioEmTodasAsAbas);
     }
 });
 
@@ -106,6 +110,26 @@ function urlDeveSerBloqueada(slot, url) {
     });
 }
 
+// Varre TODAS as abas já abertas (não só navegações novas) e bloqueia
+// qualquer uma que já devesse estar bloqueada agora. Sem isso, uma
+// aba aberta ANTES do horário começar (ex: um vídeo já tocando)
+// nunca seria reavaliada, porque `chrome.tabs.onUpdated` só dispara
+// quando a URL muda — não quando o tempo passa.
+async function aplicarBloqueioEmTodasAsAbas() {
+    const cache = await chrome.storage.local.get(['grade']);
+    const slotAtivo = obterSlotDoMomento(cache.grade);
+
+    const abas = await chrome.tabs.query({});
+    for (const aba of abas) {
+        if (!aba.url) continue;
+        if (aba.url.startsWith('chrome-extension://') || aba.url.startsWith('chrome://')) continue;
+
+        if (urlDeveSerBloqueada(slotAtivo, aba.url)) {
+            chrome.tabs.update(aba.id, { url: chrome.runtime.getURL('blocked.html') });
+        }
+    }
+}
+
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     if (!tab.url) return;
     if (tab.url.startsWith('chrome-extension://') || tab.url.startsWith('chrome://')) return;
@@ -122,7 +146,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 // a primeira autorização interativa), sem esperar o próximo alarme.
 chrome.runtime.onMessage.addListener((mensagem, sender, sendResponse) => {
     if (mensagem?.tipo === 'VERIFICAR_AGORA') {
-        sincronizarGrade().then(() => sendResponse({ ok: true }));
+        sincronizarGrade().finally(aplicarBloqueioEmTodasAsAbas).then(() => sendResponse({ ok: true }));
         return true;
     }
 });
